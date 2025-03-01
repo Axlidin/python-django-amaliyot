@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{%block content%}
+  <div class="row">
+        <div class="col-2 me-4">
+            <img class="cover-pic" src="{{ post.image.url }}" alt="cover picture">
+        </div>
+        <div class="col-6 ms-4">
+          <h2>{{ post.category.name }}</h2>
+            <h3>{{ post.title }}</h3>
+            <span class="fst-italic">
+            Authored by {{ post.author }}
+            </span>
+            <div class="col-1 me-2">
+                {% if post.author.profile_pic %}
+                    <img class="small-profile-pic" src="{{ post.author.profile_pic.url }}" alt="Muallif rasmi">
+                {% else %}
+                    <img class="small-profile-pic" src="default_profile_pic.png" alt="Default muallif rasmi">
+                {% endif %}
+            </div>
+            <div class="col-2">
+                <p>Tags:
+                {% for tag in post.tags.all %}
+                  {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                </p>
+                <p>Status: {{ post.status }}</p>
+            </div>
+            <div class="col-6">
+           <form method="post" action="{% url 'posts:reviews' post.id %}">
+                {% csrf_token %}
+               {{ review_form.review_text|as_crispy_field  }}
+                <button class="btn btn-success">Add Review</button>
+            </form>
+        </div>
+        </div>
+    </div>
+    {% if post.izohlar.exists %}
+        <h3>Review</h3><hr>
+        {% for review in reviews %}
+            <div class="row mb-3">
+                <div class="col-1 me-2">
+                    <img class="small-profile-pic" src="{{ review.user.profile_pic.url}}" alt="profile_pic">
+                </div>
+                <div class="col-7">
+                    <b>{{ review.user.username }}</b> <span class="fw-lighter">{{ review.created_at }}</span>
+                    {% if review.user == request.user %}
+                        <a href="{% url 'posts:edit_review' post.id review.id %}"><i class="bi bi-pen"></i></a>
+                        <a href="{% url 'posts:confirm-delete-review' post.id review.id %}"><i class="bi bi-trash"></i></a>
+                    {% endif %}
+                    <p class="font-monospace">{{ review.review_text }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{%endblock%}

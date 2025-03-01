@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{%block content%}
+    <h3>Post List Page</h3>
+    {% if posts %}
+        {% for post in posts %}
+                <div class="row mb-4">
+                    <div class="col-2 me-4">
+                        <img src="{{ post.image.url }}" class="cover-pic">
+                    </div>
+                    <div class="col-6 ms-4">
+                        <a href="{% url 'posts:detail' post.id %}">{{ post.title }}</a>
+                        <p>Tags:
+                            {% for tag in post.tags.all %}
+                              {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                            </p>
+                            <p>Status: {{ post.status }}</p>
+                        <p>
+                            {{ post.created_at }}
+                        </p>
+                    </div>
+                </div>
+        {% endfor %}
+    {% else %}
+          No posts found.
+    {% endif %}
+{%endblock%}

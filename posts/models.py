@@ -28,6 +28,13 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+class PostVisit(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='visit_logs')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Visit on {self.timestamp} for post {self.post.title}'
+
 class Reviews(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='izohlar')

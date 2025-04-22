@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load hitcount_tags %}
 
 {%block content%}
   <div class="row">
@@ -12,6 +13,7 @@
             <span class="fst-italic">
             Authored by {{ post.author }}
             </span>
+            <p>Ko‘rilganlar soni: {{ hitcount.hits }}</p>
             <div class="col-1 me-2">
                 {% if post.author.profile_pic %}
                     <img class="small-profile-pic" src="{{ post.author.profile_pic.url }}" alt="Muallif rasmi">
@@ -28,11 +30,13 @@
                 <p>Status: {{ post.status }}</p>
             </div>
             <div class="col-6">
-           <form method="post" action="{% url 'posts:reviews' post.id %}">
-                {% csrf_token %}
-               {{ review_form.review_text|as_crispy_field  }}
-                <button class="btn btn-success">Add Review</button>
-            </form>
+            {% if request.user.is_authenticated %}
+                <form method="post" action="{% url 'posts:reviews' post.id %}">
+                    {% csrf_token %}
+                    {{ review_form.review_text|as_crispy_field  }}
+                    <button class="btn btn-success">Add Review</button>
+                </form>
+            {% endif %}
         </div>
         </div>
     </div>

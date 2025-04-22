@@ -9,6 +9,7 @@ django-taggit = "*"
 pillow = "*"
 django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
+django-hitcount = "*"
 
 [dev-packages]
 

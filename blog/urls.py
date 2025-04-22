@@ -2,8 +2,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-
-from blog.views import landing_page
 from posts.views import HomeView
 
 urlpatterns = [
